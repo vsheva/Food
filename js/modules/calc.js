@@ -1,7 +1,6 @@
-function calculator() {
-  //Calculator
-
+function calc() {
   const result = document.querySelector(".calculating__result span");
+
   let sex, height, weight, age, ratio;
 
   if (localStorage.getItem("sex")) {
@@ -18,32 +17,9 @@ function calculator() {
     localStorage.setItem("ratio", 1.375);
   }
 
-  function initLocalSettings(selector, activeClass) {
-    const elements = document.querySelectorAll(selector);
-    elements.forEach((element) => {
-      element.classList.remove(activeClass);
-
-      if (element.getAttribute("id") === localStorage.getItem("sex")) {
-        element.classList.add(activeClass);
-      }
-
-      if (
-        element.getAttribute("data-ratio") === localStorage.getItem("ratio")
-      ) {
-        element.classList.add(activeClass);
-      }
-    });
-  }
-
-  initLocalSettings("#gender", "calculating__choose-item_active");
-  initLocalSettings(
-    ".calculating__choose_big",
-    "calculating__choose-item_active"
-  );
-
   function calcTotal() {
     if (!sex || !height || !weight || !age || !ratio) {
-      result.textContent = "____"; //  придумать что угодно
+      result.textContent = "____";
       return;
     }
     if (sex === "female") {
@@ -59,6 +35,26 @@ function calculator() {
 
   calcTotal();
 
+  function initLocalSettings(selector, activeClass) {
+    const elements = document.querySelectorAll(selector);
+
+    elements.forEach((elem) => {
+      elem.classList.remove(activeClass);
+      if (elem.getAttribute("id") === localStorage.getItem("sex")) {
+        elem.classList.add(activeClass);
+      }
+      if (elem.getAttribute("data-ratio") === localStorage.getItem("ratio")) {
+        elem.classList.add(activeClass);
+      }
+    });
+  }
+
+  initLocalSettings("#gender div", "calculating__choose-item_active");
+  initLocalSettings(
+    ".calculating__choose_big div",
+    "calculating__choose-item_active"
+  );
+
   function getStaticInformation(selector, activeClass) {
     const elements = document.querySelectorAll(selector);
 
@@ -69,7 +65,7 @@ function calculator() {
           localStorage.setItem("ratio", +e.target.getAttribute("data-ratio"));
         } else {
           sex = e.target.getAttribute("id");
-          localStorage.setItem("sex", +e.target.getAttribute("id"));
+          localStorage.setItem("sex", e.target.getAttribute("id"));
         }
 
         elements.forEach((elem) => {
@@ -118,4 +114,5 @@ function calculator() {
   getDynamicInformation("#weight");
   getDynamicInformation("#age");
 }
-module.exports = calculator;
+
+export default calc;
